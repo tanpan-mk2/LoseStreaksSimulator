@@ -1,0 +1,58 @@
+<p>
+    勝率:<input id="winRate" type="number" value="25">%
+</p>
+<p>
+    試合数:<input id="gameCount" type="number" value="1000">
+</p>
+<p>
+    プレイヤー数:<input id="players" type="number" value="10">
+</p>
+<p>
+    <button id="execute" type="button">
+        実行
+    </button>
+</p>
+<ul id="result"></ul>
+<script>
+    const buttonDom = document.getElementById('execute');
+
+    buttonDom.addEventListener('click', () => {
+        const winRate = document.getElementById('winRate').value / 100; //0.5;
+        const gameCount = document.getElementById('gameCount').value; //10000;
+        const players = document.getElementById('players').value; //10;
+
+        const resultDom = document.getElementById('result');
+        while (resultDom.firstChild) {
+            resultDom.removeChild(resultDom.firstChild);
+        }
+
+        for (let player = 1; player <= players; player++) {
+            let currentWinStreaks = 0;
+            let currentLoseStreaks = 0;
+            let maxWinStreaks = 0;
+            let maxLoseStreaks = 0;
+
+            for (let game = 1; game <= gameCount; game++) {
+                const wins = Math.random() < winRate;
+                if (wins) {
+                    currentLoseStreaks = 0;
+                    currentWinStreaks++;
+
+                    if (maxWinStreaks < currentWinStreaks) {
+                        maxWinStreaks = currentWinStreaks;
+                    }
+                } else {
+                    currentWinStreaks = 0;
+                    currentLoseStreaks++;
+
+                    if (maxLoseStreaks < currentLoseStreaks) {
+                        maxLoseStreaks = currentLoseStreaks;
+                    }
+                }
+            }
+            const resultItemDom = document.createElement('li');
+            resultItemDom.innerText = `player${player} 最大連勝:${maxWinStreaks} 最大連敗:${maxLoseStreaks}`;
+            resultDom.appendChild(resultItemDom);
+        }
+    });
+</script>
